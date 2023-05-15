@@ -25,28 +25,39 @@ import type {
 
 export interface AMMInterface extends utils.Interface {
   functions: {
+    "Kval()": FunctionFragment;
     "PoolStats()": FunctionFragment;
     "addLiquidity(uint256,uint256)": FunctionFragment;
     "estimateToken1GivenToken2(uint256)": FunctionFragment;
     "estimateToken2GivenToken1(uint256)": FunctionFragment;
     "getWithdrawEstimate(uint256)": FunctionFragment;
+    "shares(address)": FunctionFragment;
     "swapToken1(uint256)": FunctionFragment;
     "swapToken2(uint256)": FunctionFragment;
+    "totalShares()": FunctionFragment;
+    "totalToken1()": FunctionFragment;
+    "totalToken2()": FunctionFragment;
     "withdrawLiquidity(uint256)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "Kval"
       | "PoolStats"
       | "addLiquidity"
       | "estimateToken1GivenToken2"
       | "estimateToken2GivenToken1"
       | "getWithdrawEstimate"
+      | "shares"
       | "swapToken1"
       | "swapToken2"
+      | "totalShares"
+      | "totalToken1"
+      | "totalToken2"
       | "withdrawLiquidity"
   ): FunctionFragment;
 
+  encodeFunctionData(functionFragment: "Kval", values?: undefined): string;
   encodeFunctionData(functionFragment: "PoolStats", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "addLiquidity",
@@ -65,6 +76,10 @@ export interface AMMInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "shares",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "swapToken1",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -73,10 +88,23 @@ export interface AMMInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "totalShares",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "totalToken1",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "totalToken2",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "withdrawLiquidity",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
 
+  decodeFunctionResult(functionFragment: "Kval", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "PoolStats", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "addLiquidity",
@@ -94,8 +122,21 @@ export interface AMMInterface extends utils.Interface {
     functionFragment: "getWithdrawEstimate",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "shares", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "swapToken1", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "swapToken2", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "totalShares",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "totalToken1",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "totalToken2",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "withdrawLiquidity",
     data: BytesLike
@@ -131,9 +172,11 @@ export interface AMM extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    Kval(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     PoolStats(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber, BigNumber, BigNumber]>;
 
     addLiquidity(
       _token1: PromiseOrValue<BigNumberish>,
@@ -158,6 +201,11 @@ export interface AMM extends BaseContract {
       [BigNumber, BigNumber] & { token1out: BigNumber; token2out: BigNumber }
     >;
 
+    shares(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     swapToken1(
       _amtToken1: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -168,15 +216,23 @@ export interface AMM extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    totalShares(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    totalToken1(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    totalToken2(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     withdrawLiquidity(
       _share: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
+  Kval(overrides?: CallOverrides): Promise<BigNumber>;
+
   PoolStats(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<[BigNumber, BigNumber, BigNumber, BigNumber]>;
 
   addLiquidity(
     _token1: PromiseOrValue<BigNumberish>,
@@ -201,6 +257,11 @@ export interface AMM extends BaseContract {
     [BigNumber, BigNumber] & { token1out: BigNumber; token2out: BigNumber }
   >;
 
+  shares(
+    arg0: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   swapToken1(
     _amtToken1: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -211,13 +272,23 @@ export interface AMM extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  totalShares(overrides?: CallOverrides): Promise<BigNumber>;
+
+  totalToken1(overrides?: CallOverrides): Promise<BigNumber>;
+
+  totalToken2(overrides?: CallOverrides): Promise<BigNumber>;
+
   withdrawLiquidity(
     _share: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    PoolStats(overrides?: CallOverrides): Promise<void>;
+    Kval(overrides?: CallOverrides): Promise<BigNumber>;
+
+    PoolStats(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber, BigNumber, BigNumber]>;
 
     addLiquidity(
       _token1: PromiseOrValue<BigNumberish>,
@@ -242,6 +313,11 @@ export interface AMM extends BaseContract {
       [BigNumber, BigNumber] & { token1out: BigNumber; token2out: BigNumber }
     >;
 
+    shares(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     swapToken1(
       _amtToken1: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -251,6 +327,12 @@ export interface AMM extends BaseContract {
       _amtToken2: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    totalShares(overrides?: CallOverrides): Promise<BigNumber>;
+
+    totalToken1(overrides?: CallOverrides): Promise<BigNumber>;
+
+    totalToken2(overrides?: CallOverrides): Promise<BigNumber>;
 
     withdrawLiquidity(
       _share: PromiseOrValue<BigNumberish>,
@@ -261,9 +343,9 @@ export interface AMM extends BaseContract {
   filters: {};
 
   estimateGas: {
-    PoolStats(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    Kval(overrides?: CallOverrides): Promise<BigNumber>;
+
+    PoolStats(overrides?: CallOverrides): Promise<BigNumber>;
 
     addLiquidity(
       _token1: PromiseOrValue<BigNumberish>,
@@ -286,6 +368,11 @@ export interface AMM extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    shares(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     swapToken1(
       _amtToken1: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -295,6 +382,12 @@ export interface AMM extends BaseContract {
       _amtToken2: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    totalShares(overrides?: CallOverrides): Promise<BigNumber>;
+
+    totalToken1(overrides?: CallOverrides): Promise<BigNumber>;
+
+    totalToken2(overrides?: CallOverrides): Promise<BigNumber>;
 
     withdrawLiquidity(
       _share: PromiseOrValue<BigNumberish>,
@@ -303,9 +396,9 @@ export interface AMM extends BaseContract {
   };
 
   populateTransaction: {
-    PoolStats(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
+    Kval(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    PoolStats(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     addLiquidity(
       _token1: PromiseOrValue<BigNumberish>,
@@ -328,6 +421,11 @@ export interface AMM extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    shares(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     swapToken1(
       _amtToken1: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -337,6 +435,12 @@ export interface AMM extends BaseContract {
       _amtToken2: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    totalShares(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    totalToken1(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    totalToken2(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     withdrawLiquidity(
       _share: PromiseOrValue<BigNumberish>,

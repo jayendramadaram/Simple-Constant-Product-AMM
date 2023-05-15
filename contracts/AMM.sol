@@ -12,10 +12,10 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract AMM {
     using SafeMath for uint256; // using safemath to bound underflows and overflows
-    uint256 totalShares; // total shares issues in the pool
-    uint256 totalToken1;  // Stores the amount of Token1 locked in the pool
-    uint256 totalToken2;  // Stores the amount of Token2 locked in the pool
-    uint256 Kval;            // Algorithmic constant used to determine price (K = totalToken1 * totalToken2)
+    uint256 public totalShares; // total shares issues in the pool
+    uint256 public totalToken1;  // Stores the amount of Token1 locked in the pool
+    uint256 public totalToken2;  // Stores the amount of Token2 locked in the pool
+    uint256 public Kval;            // Algorithmic constant used to determine price (K = totalToken1 * totalToken2)
 
     mapping(address => uint256) public shares; // balance sheet showing lp balances 
     uint256 constant PRECISION = 1_000_000;
@@ -51,12 +51,12 @@ contract AMM {
         }
         require(share > 0 , "valid amount has to be provided");
 
-        totalToken1.add(_token1);
-        totalToken2.add(_token2);
+        totalToken1 = totalToken1.add(_token1);
+        totalToken2 = totalToken2.add(_token2);
 
         Kval = totalToken1.mul(totalToken2);  
 
-        totalShares.add(share);
+        totalShares = totalShares.add(share);
         shares[msg.sender] += share;
 
     }
@@ -104,11 +104,18 @@ contract AMM {
     function estimateToken1GivenToken2(uint _amtToken2) public view returns(uint256 amountToken1) {
         uint256 token2After = totalToken2.add(_amtToken2);
         uint256 token1After = Kval.div(token2After);
-        amountToken1 = totalToken2.sub(token2After);
-        if(amountToken1 == totalToken2) amountToken1--;
+        amountToken1 = totalToken1.sub(token1After);
+        if(amountToken1 == totalToken1) amountToken1--;
     }
 
     function estimateToken2GivenToken1(uint _amtToken1) public view returns(uint256 amountToken2)  {
+        /**
+         * say
+         * 1000 * 1000 = 100000
+         * 1000 + 50 * 1000  + x = 100000
+         * 1050(1000 + x) = 100000
+         * x = -48
+         */
         uint256 token1After = totalToken1.add(_amtToken1);
         uint256 token2After = Kval.div(token1After);
         amountToken2 = totalToken2.sub(token2After);
@@ -119,8 +126,8 @@ contract AMM {
         // check if share is less than totalshares
         // calculate amount of token1 and token2 out for given shares
         require(_share <= totalShares , "share must be less than total shares");
-        uint token1out = _share.mul(totalToken1).div(totalShares); 
-        uint token2out = _share.mul(totalToken2).div(totalShares); 
+         token1out = _share.mul(totalToken1).div(totalShares); 
+         token2out = _share.mul(totalToken2).div(totalShares); 
     }
 
 }

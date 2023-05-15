@@ -8,8 +8,17 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {},
   },
+  gasReporter: {
+    // enabled: true,
+  },
   solidity: {
     compilers: [{ version: "0.8.9", settings: {} }],
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 2000,
+      },
+    },
   },
   paths: {
     artifacts: "./artifacts",
