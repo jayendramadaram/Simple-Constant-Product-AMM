@@ -1,9 +1,7 @@
-import { time, loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import "@nomiclabs/hardhat-ethers";
-import { MyToken } from "../types";
-import { AMM } from "../types";
+import { AMM, MyToken } from "../types";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 describe("AMM TESTING", function () {
