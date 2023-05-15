@@ -16,6 +16,7 @@ contract AMM {
     uint256 totalToken1;  // Stores the amount of Token1 locked in the pool
     uint256 totalToken2;  // Stores the amount of Token2 locked in the pool
     uint256 Kval;            // Algorithmic constant used to determine price (K = totalToken1 * totalToken2)
+    uint public feeCharge; // Fee per transaction 
 
     mapping(address => uint256) public shares; // balance sheet showing lp balances 
     uint256 constant PRECISION = 1_000_000;
@@ -26,6 +27,11 @@ contract AMM {
     constructor(address _token1 , address _token2) {
         Token1 = IERC20(_token1); 
         Token2 = IERC20(_token2);
+    }
+
+    function setFee(uint _fee) external{
+        require(msg.sender==owner(),"Bruh, you dont belong here!");
+        feeCharge = _fee;
     }
 
     function PoolStats() public view returns(uint , uint , uint , uint) {
@@ -65,18 +71,22 @@ contract AMM {
         // call estimatewithdraw function
         // refund tokens to wallet
         // update states
-        (uint amountToken1,uint amountToken2) = getWithdrawEstimate(_share);
+        (uint amountToken1, uint amountToken2) = getWithdrawEstimate(_share);
+        
+        uint256 feeAmountToken1 = amountToken1.mul(feeRate).div(10000); // calculate the fee amount
+        uint256 feeAmountToken2 = amountToken2.mul(feeRate).div(10000); // 10000 = 100% 
 
         shares[msg.sender] -= _share;
         totalShares -= _share;
 
-        totalToken1 -= amountToken1;
-        totalToken2 -= amountToken2;
+        totalToken1 -= (amountToken1.add(feeAmountToken1)); // charge  fee  from the totalToken1
+        totalToken2 -= (amountToken2.add(feeAmountToken2)); // charge  fee  from the totalToken2
 
         Kval = totalToken1.mul(totalToken2);
         require(Token1.transfer(msg.sender, amountToken1), "Token1 transfer failed");
         require(Token2.transfer(msg.sender, amountToken2), "Token2 transfer failed");
     }
+
 
     function swapToken1(uint _amtToken1) public {
         // get amt of token2 from estimateToken2GivenToken1 function
