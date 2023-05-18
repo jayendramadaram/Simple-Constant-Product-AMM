@@ -1,11 +1,10 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 // require("@nomiclabs/hardhat-waffle");
-import 'dotenv/config';
+import "dotenv/config";
 require("@nomiclabs/hardhat-ethers");
 
 // console.log(process.env.INFURA_ID);
-
 
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
@@ -13,19 +12,14 @@ const config: HardhatUserConfig = {
     hardhat: {},
     goerli: {
       url: `https://goerli.infura.io/v3/${process.env.INFURA_ID}`,
-      accounts: [
-        `${process.env.PRIV_KEY}`
-      ],
+      accounts: [`${process.env.PRIV_KEY}`],
     },
     fuji: {
       url: "https://api.avax-test.network/ext/bc/C/rpc",
       gasPrice: 225000000000,
       chainId: 43113,
-      accounts: [
-        `${process.env.PRIV_KEY}`
-      ],
+      accounts: [`${process.env.PRIV_KEY}`],
     },
-
   },
   gasReporter: {
     enabled: true,
@@ -53,9 +47,8 @@ const config: HardhatUserConfig = {
     target: "ethers-v5",
   },
   etherscan: {
-    apiKey: "YGXM458QYWHHXIBE3GJBR3CGWQ179KDJXI"
+    apiKey: "5KS7C3ZT26F4JJ9IEUYANEKRPTQRAWT9EJ",
   },
-
 };
 
 export default config;

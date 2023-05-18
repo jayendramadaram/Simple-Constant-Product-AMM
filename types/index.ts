@@ -14,8 +14,6 @@ export type { IERC20 } from "./@openzeppelin/contracts/token/ERC20/IERC20";
 export { IERC20__factory } from "./factories/@openzeppelin/contracts/token/ERC20/IERC20__factory";
 export type { AMM } from "./contracts/AMM";
 export { AMM__factory } from "./factories/contracts/AMM__factory";
-export type { AmmFactory } from "./contracts/AmmFactory.sol/AmmFactory";
-export { AmmFactory__factory } from "./factories/contracts/AmmFactory.sol/AmmFactory__factory";
 export type { AMMFACTORY } from "./contracts/AmmFactory.sol/AMMFACTORY";
 export { AMMFACTORY__factory } from "./factories/contracts/AmmFactory.sol/AMMFACTORY__factory";
 export type { MyToken } from "./contracts/Token.sol/MyToken";

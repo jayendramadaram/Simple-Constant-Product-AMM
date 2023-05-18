@@ -2,4 +2,3 @@
 /* tslint:disable */
 /* eslint-disable */
 export { AMMFACTORY__factory } from "./AMMFACTORY__factory";
-export { AmmFactory__factory } from "./AmmFactory__factory";

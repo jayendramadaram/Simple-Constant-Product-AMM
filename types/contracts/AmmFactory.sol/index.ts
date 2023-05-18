@@ -2,4 +2,3 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { AMMFACTORY } from "./AMMFACTORY";
-export type { AmmFactory } from "./AmmFactory";

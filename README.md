@@ -11,3 +11,16 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.ts
 ```
+
+Front end Nextjs , Typescript , Tailwind []
+
+Redux :
+
+> Query pools,
+> Load Contracts and Auth FLow
+
+React-Query
+
+> API calls and cashing
+
+Ts interfaces for contracts

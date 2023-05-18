@@ -29,10 +29,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.AMM__factory>;
     getContractFactory(
-      name: "AmmFactory",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AmmFactory__factory>;
-    getContractFactory(
       name: "AMMFACTORY",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.AMMFACTORY__factory>;
@@ -61,11 +57,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.AMM>;
-    getContractAt(
-      name: "AmmFactory",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AmmFactory>;
     getContractAt(
       name: "AMMFACTORY",
       address: string,
