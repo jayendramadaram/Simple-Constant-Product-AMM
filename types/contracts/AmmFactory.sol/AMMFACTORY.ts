@@ -29,22 +29,35 @@ import type {
 export interface AMMFACTORYInterface extends utils.Interface {
   functions: {
     "CreatePool(address,address)": FunctionFragment;
+    "CreateToken(string)": FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: "CreatePool"): FunctionFragment;
+  getFunction(
+    nameOrSignatureOrTopic: "CreatePool" | "CreateToken"
+  ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "CreatePool",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(
+    functionFragment: "CreateToken",
+    values: [PromiseOrValue<string>]
+  ): string;
 
   decodeFunctionResult(functionFragment: "CreatePool", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "CreateToken",
+    data: BytesLike
+  ): Result;
 
   events: {
     "PoolCreated(address,address,address)": EventFragment;
+    "TokenCreated(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "PoolCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TokenCreated"): EventFragment;
 }
 
 export interface PoolCreatedEventObject {
@@ -58,6 +71,13 @@ export type PoolCreatedEvent = TypedEvent<
 >;
 
 export type PoolCreatedEventFilter = TypedEventFilter<PoolCreatedEvent>;
+
+export interface TokenCreatedEventObject {
+  TokenAddress: string;
+}
+export type TokenCreatedEvent = TypedEvent<[string], TokenCreatedEventObject>;
+
+export type TokenCreatedEventFilter = TypedEventFilter<TokenCreatedEvent>;
 
 export interface AMMFACTORY extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -91,6 +111,11 @@ export interface AMMFACTORY extends BaseContract {
       Token2Address: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    CreateToken(
+      TokenName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
 
   CreatePool(
@@ -99,10 +124,20 @@ export interface AMMFACTORY extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  CreateToken(
+    TokenName: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     CreatePool(
       Token1Address: PromiseOrValue<string>,
       Token2Address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    CreateToken(
+      TokenName: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<string>;
   };
@@ -118,6 +153,9 @@ export interface AMMFACTORY extends BaseContract {
       Token1Address?: null,
       Token2Address?: null
     ): PoolCreatedEventFilter;
+
+    "TokenCreated(address)"(TokenAddress?: null): TokenCreatedEventFilter;
+    TokenCreated(TokenAddress?: null): TokenCreatedEventFilter;
   };
 
   estimateGas: {
@@ -126,12 +164,22 @@ export interface AMMFACTORY extends BaseContract {
       Token2Address: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    CreateToken(
+      TokenName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     CreatePool(
       Token1Address: PromiseOrValue<string>,
       Token2Address: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    CreateToken(
+      TokenName: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

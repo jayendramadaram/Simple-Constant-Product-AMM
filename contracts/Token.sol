@@ -1,5 +1,6 @@
 pragma solidity ^0.8.0;
 
+
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
@@ -12,7 +13,7 @@ contract MyToken is ERC20 {
         _;
     }
     
-    constructor() ERC20("My Token", "MTK") {
+    constructor(string memory TokenName) ERC20("My Token", TokenName) {
         _mint(msg.sender, 1000000 * (10 ** uint256(decimals())));
         owner = msg.sender;
     }
@@ -22,7 +23,7 @@ contract MyToken is ERC20 {
         * @param account address of account where u wanna send funds to
      * @param amount How many funds u wanna send too
      */
-    function mint(address account, uint256 amount) public onlyOwner  {
+    function mint(address account, uint256 amount) public   {
         _mint(account, amount);
     }
 }
